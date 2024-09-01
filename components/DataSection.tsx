@@ -1,7 +1,7 @@
 import BarChartScreen from "@/app/barChartScreen";
 import SegmentedControl from "@react-native-segmented-control/segmented-control";
 import { SymbolView } from "expo-symbols";
-import React from "react";
+import React, { useContext } from "react";
 import {
   StyleSheet,
   View,
@@ -9,8 +9,16 @@ import {
   Dimensions,
   TouchableOpacity,
 } from "react-native";
+import { expenseBarData } from "./context/ExpenseData";
+import { AppContext } from "./context/AppContext";
 
 const DataSection = () => {
+  const [transactionType, setTransactionType] = React.useState<
+    "Day" | "Week" | "Month" | "Year"
+  >("Day");
+
+  const context = useContext(AppContext);
+  const { expenseData, setExpenseData } = context;
   return (
     <View>
       <BarChartScreen>
@@ -21,6 +29,21 @@ const DataSection = () => {
             marginBottom: 20,
           }}
           selectedIndex={0}
+          onChange={(event) => {
+            const index = event.nativeEvent.selectedSegmentIndex;
+            if (index === 0) {
+              setTransactionType("Day");
+              setExpenseData([expenseBarData({ type: "day" })]);
+            } else {
+              setTransactionType("Month");
+              setExpenseData(
+                expenseBarData({
+                  type: "month",
+                  input: "1",
+                })
+              );
+            }
+          }}
         />
 
         <View

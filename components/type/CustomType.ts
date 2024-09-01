@@ -20,4 +20,9 @@ type Expense = {
 type ChartData = {
   label: string;
   total: number;
+  expenses: {
+    name: string;
+    date: string;
+    price: number;
+  }[];
 };

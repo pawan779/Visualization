@@ -1,48 +1,17 @@
+import { AppContext } from "@/components/context/AppContext";
 import { categories, expenses } from "@/data/sampleData";
-import React from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  Dimensions,
-} from "react-native";
-import { BarChart, PieChart } from "react-native-gifted-charts";
-import { SymbolView } from "expo-symbols";
-import SegmentedControl from "@react-native-segmented-control/segmented-control";
+import React, { useContext } from "react";
+import { View, Text, StyleSheet } from "react-native";
+import { PieChart } from "react-native-gifted-charts";
 
 interface ChartScreenProps {
   children?: React.ReactNode;
 }
 
 const ChartScreen: React.FC<ChartScreenProps> = ({ children }) => {
-  const groupExpensesByCategory = (
-    expenses: Expense[]
-  ): Record<string, number> => {
-    return expenses.reduce<Record<string, number>>((acc, expense) => {
-      if (!acc[expense.categoryId]) {
-        acc[expense.categoryId] = 0;
-      }
-      acc[expense.categoryId] += expense.price;
-      return acc;
-    }, {});
-  };
+  const context = useContext(AppContext);
 
-  const groupedExpenses = groupExpensesByCategory(expenses);
-
-  const chartData: ChartData[] = categories
-    .map((category) => ({
-      label: category.name,
-      total: groupedExpenses[category.id] || 0,
-    }))
-    .filter((data) => data.total > 0);
-
-  const barData = chartData.map((item) => ({
-    value: item.total,
-    label: item.label,
-    frontColor: "#69b3a2",
-  }));
-
+  const { expenseData, setExpenseData } = context;
   return (
     <View style={styles.container}>
       {children}
@@ -51,8 +20,10 @@ const ChartScreen: React.FC<ChartScreenProps> = ({ children }) => {
         ${barData.reduce((total, item) => total + item.value, 0).toFixed(2)}
       </Text> */}
       <PieChart
-        data={barData ?? []}
+        data={expenseData ?? []}
         donut
+        strokeWidth={3}
+        strokeColor="#25261f"
         radius={130}
         sectionAutoFocus
         innerRadius={80} // Adjust to control the donut hole size
@@ -60,7 +31,9 @@ const ChartScreen: React.FC<ChartScreenProps> = ({ children }) => {
         innerCircleColor={"#25261f"}
         centerLabelComponent={() => (
           <View>
-            <Text style={{ fontSize: 18, fontWeight: "bold" }}>Total</Text>
+            <Text style={{ fontSize: 18, fontWeight: "bold" }}>
+              {expenseData[1]?.value}
+            </Text>
           </View>
         )}
         isAnimated

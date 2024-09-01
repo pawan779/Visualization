@@ -56,5 +56,3 @@ export const expenses: Expense[] = Array.from({ length: 100 }, () => {
     date,
   };
 });
-
-console.log(expenses);

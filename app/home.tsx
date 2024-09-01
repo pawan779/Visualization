@@ -1,36 +1,27 @@
 import ListView from "@/components/ListView";
 import { expenses } from "@/data/sampleData";
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import { StyleSheet, View, Text, FlatList } from "react-native";
 import BarChartScreen from "./barChartScreen";
 import Header from "@/components/Header";
 import SegmentedControl from "@react-native-segmented-control/segmented-control";
+import { AppContext } from "@/components/context/AppContext";
 import DataSection from "@/components/DataSection";
-const chartType: ChartProps[] = [
-  {
-    id: 1,
-    name: "Bar Chart",
-    type: "barChart",
-  },
-  {
-    id: 2,
-    name: "Line Chart",
-    type: "lineChart",
-  },
-  {
-    id: 3,
-    name: "Pie Chart",
-    type: "pieChart",
-  },
-];
+import { expenseBarData } from "@/components/context/ExpenseData";
 
 const HomeScreen = () => {
   const [transactionType, setTransactionType] = React.useState<
     "Income" | "Expense"
   >("Income");
+  const context = useContext(AppContext);
+  const { expenseData, setExpenseData } = context;
+
+  useEffect(() => {
+    setExpenseData(expenseBarData);
+  }, []);
+
   return (
     <View style={{ flex: 1 }}>
-      {/* <BarChartScreen /> */}
       <Header>
         <View
           style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
@@ -38,13 +29,15 @@ const HomeScreen = () => {
           <SegmentedControl
             values={["Expense", "Income"]}
             style={{ width: 200 }}
-            selectedIndex={1}
+            selectedIndex={0}
             onChange={(event) => {
               const index = event.nativeEvent.selectedSegmentIndex;
               if (index === 0) {
                 setTransactionType("Income");
+                setExpenseData(expenseBarData("day"));
               } else {
                 setTransactionType("Expense");
+                setExpenseData([]);
               }
             }}
           />

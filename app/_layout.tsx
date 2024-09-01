@@ -15,6 +15,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { StatusBar, TouchableOpacity, View } from "react-native";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import HomeScreen from "./home";
+import { AppProvider } from "@/components/context/AppContext";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -58,9 +59,10 @@ function RootLayoutNav() {
 
   return (
     <View style={{ flex: 1, backgroundColor: "#000" }}>
-      <StatusBar barStyle={"dark-content"} />
-      <HomeScreen />
-      {/* <Stack initialRouteName="home">
+      <AppProvider>
+        <StatusBar barStyle={"dark-content"} />
+        <HomeScreen />
+        {/* <Stack initialRouteName="home">
           <Stack.Screen
             name="home"
             options={{
@@ -78,6 +80,7 @@ function RootLayoutNav() {
             }}
           />
         </Stack> */}
+      </AppProvider>
     </View>
   );
 }
