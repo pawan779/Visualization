@@ -14,6 +14,7 @@ import { useColorScheme } from "@/components/useColorScheme";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { TouchableOpacity } from "react-native";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import HomeScreen from "./home";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -58,7 +59,7 @@ function RootLayoutNav() {
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
       <SafeAreaView style={{ flex: 1 }}>
-        <Stack>
+        <Stack initialRouteName="home">
           <Stack.Screen
             name="home"
             options={{
@@ -76,6 +77,7 @@ function RootLayoutNav() {
             }}
           />
         </Stack>
+        {/* <HomeScreen /> */}
       </SafeAreaView>
     </ThemeProvider>
   );

@@ -1,7 +1,8 @@
 import ListView from "@/components/ListView";
+import { expenses } from "@/data/sampleData";
 import React from "react";
 import { StyleSheet, View, Text, FlatList } from "react-native";
-
+import BarChartScreen from "./barChartScreen";
 const chartType: ChartProps[] = [
   {
     id: 1,
@@ -21,7 +22,12 @@ const chartType: ChartProps[] = [
 ];
 
 const HomeScreen = () => {
-  return <View style={{ flex: 1 }}></View>;
+  //   console.log("expense", expenses);
+  return (
+    <View style={{ flex: 1 }}>
+      <BarChartScreen />
+    </View>
+  );
 };
 
 export default HomeScreen;
