@@ -1,11 +1,21 @@
 import { categories, expenses } from "@/data/sampleData";
 import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import { BarChart } from "react-native-gifted-charts";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Dimensions,
+} from "react-native";
+import { BarChart, PieChart } from "react-native-gifted-charts";
 import { SymbolView } from "expo-symbols";
 import SegmentedControl from "@react-native-segmented-control/segmented-control";
 
-const BarChartScreen = () => {
+interface ChartScreenProps {
+  children?: React.ReactNode;
+}
+
+const ChartScreen: React.FC<ChartScreenProps> = ({ children }) => {
   const groupExpensesByCategory = (
     expenses: Expense[]
   ): Record<string, number> => {
@@ -30,92 +40,44 @@ const BarChartScreen = () => {
   const barData = chartData.map((item) => ({
     value: item.total,
     label: item.label,
-    frontColor: "#69b3a2", // Customize color
+    frontColor: "#69b3a2",
   }));
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Expense Data by Category</Text>
+      {children}
+      {/* <Text style={styles.title}>Expense Data by Category</Text>
       <Text style={{ fontWeight: "700", fontSize: 32, marginBottom: 16 }}>
         ${barData.reduce((total, item) => total + item.value, 0).toFixed(2)}
-      </Text>
-      <BarChart
+      </Text> */}
+      <PieChart
         data={barData ?? []}
-        // barBorderWidth={1}
-        showScrollIndicator={false}
-        spacing={40}
-        width={300}
-        height={200}
-        barWidth={30}
-        noOfSections={6}
-        yAxisThickness={0}
-        isAnimated={true}
-        renderTooltip={(item, index) => {
-          return (
-            <View
-              style={{
-                marginBottom: -20,
-                marginLeft: -6,
-                backgroundColor: "#ffffff",
-                paddingHorizontal: 6,
-                paddingVertical: 4,
-                borderRadius: 4,
-              }}
-            >
-              <Text>{"$" + item.value.toFixed(2)}</Text>
-            </View>
-          );
-        }}
+        donut
+        radius={130}
+        sectionAutoFocus
+        innerRadius={80} // Adjust to control the donut hole size
+        showText={false} // Disable value text on slices
+        innerCircleColor={"#25261f"}
+        centerLabelComponent={() => (
+          <View>
+            <Text style={{ fontSize: 18, fontWeight: "bold" }}>Total</Text>
+          </View>
+        )}
+        isAnimated
       />
-      <View
-        style={{
-          flexDirection: "row",
-          justifyContent: "space-between",
-          alignItems: "baseline",
-          marginTop: 16,
-        }}
-      >
-        <TouchableOpacity
-          // onPress={handlePreviousWeek}
-          style={{ alignItems: "center" }}
-        >
-          <SymbolView
-            name="chevron.left.circle.fill"
-            size={40}
-            type="hierarchical"
-            tintColor={"gray"}
-          />
-          <Text style={{ fontSize: 11, color: "gray" }}>Prev week</Text>
-        </TouchableOpacity>
-        <SegmentedControl
-          values={["Income", "Expense"]}
-          style={{ width: 200 }}
-          selectedIndex={1}
-        />
-        <TouchableOpacity
-          // onPress={handleNextWeek}
-          style={{ alignItems: "center" }}
-        >
-          <SymbolView
-            name="chevron.right.circle.fill"
-            size={40}
-            type="hierarchical"
-            tintColor={"gray"}
-          />
-          <Text style={{ fontSize: 11, color: "gray" }}>Next week</Text>
-        </TouchableOpacity>
-      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
+    marginHorizontal: 10,
+    marginTop: -50,
     padding: 20,
-    backgroundColor: "#f5f5f5",
-    flex: 1,
+    backgroundColor: "#25261f",
     justifyContent: "center",
     alignItems: "center",
+    borderRadius: 20,
   },
   title: {
     fontSize: 18,
@@ -124,4 +86,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default BarChartScreen;
+export default ChartScreen;

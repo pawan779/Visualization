@@ -12,7 +12,7 @@ import "react-native-reanimated";
 
 import { useColorScheme } from "@/components/useColorScheme";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { TouchableOpacity } from "react-native";
+import { StatusBar, TouchableOpacity, View } from "react-native";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import HomeScreen from "./home";
 
@@ -57,9 +57,10 @@ function RootLayoutNav() {
   const colorScheme = useColorScheme();
 
   return (
-    <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-      <SafeAreaView style={{ flex: 1 }}>
-        <Stack initialRouteName="home">
+    <View style={{ flex: 1, backgroundColor: "#000" }}>
+      <StatusBar barStyle={"dark-content"} />
+      <HomeScreen />
+      {/* <Stack initialRouteName="home">
           <Stack.Screen
             name="home"
             options={{
@@ -76,9 +77,7 @@ function RootLayoutNav() {
               ),
             }}
           />
-        </Stack>
-        {/* <HomeScreen /> */}
-      </SafeAreaView>
-    </ThemeProvider>
+        </Stack> */}
+    </View>
   );
 }
